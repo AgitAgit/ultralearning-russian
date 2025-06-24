@@ -1,0 +1,9 @@
+How do I deal with pdfs that are pictures of pages?
+OCR?(optical character recognition)
+    tesseract.js? (library)
+    AWS Textract? (api service)
+
+Maybe I should add epub handling.
+    epub.js?
+    epub-parser?
+

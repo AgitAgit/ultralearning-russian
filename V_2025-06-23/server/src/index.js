@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
 const users = require('./routes/users')
+const books = require('./routes/books')
+
 // Load environment variables
 dotenv.config();
 
@@ -15,19 +17,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // CORS middleware (for development)
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', '*');
-//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-//   if (req.method === 'OPTIONS') {
-//     res.sendStatus(200);
-//   } else {
-//     next();
-//   }
-// });
+// TODO: add a check if the server is running in dev mode.
+// If not, limit the allowed origin to the deployed client?
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
 
 
+// routes
 app.use('/users', users)
+app.use('/books', books)
 
 // Basic route
 app.get('/', (req, res) => {

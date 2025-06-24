@@ -1,4 +1,4 @@
-2025/06/23
+2025/06/23 => ?
 General plan:
 An app that records a user's vocabulary and recommends the next read based on the
 vocabulary of books.
@@ -7,17 +7,19 @@ General tasks:
 -keep a record of books and their vocabulary. 
 (make an array of the string then use set?)
 
+build a server
 1. write a basic express server, and get a hello world from postman DONE.
 2. connect the server to mongodb and get some document. DONE.
 2.1. Add a book module. DONE.
-2.2. Add controller and routes to add and get books.
-2.3. Save some short stories/articles in the assets folder as strings.
+2.2. Add controller and routes to add and get books. DONE.
+2.3. extract a string from a pdf file
+2.4. extract the wordList from the string, and send only those to the db.
+2.5. Add a vocabulary array to user and a route to add word/words to it.
 3. write a string manipulation module to extract vocabulary. (Might be moved to the client later)
 
-4. build a client
--extract a string from a pdf file
--extract the wordList from the string, and send only those to the server.
-
+build a client
+1. get ping from server DONE.
+2. send a pdf to the server
 
 for the next version:
 -add user authentication (oAuth? Auth0?)

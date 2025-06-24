@@ -14,5 +14,7 @@ const bookSchema = new Schema({
         versionKey: false
     });
 
+bookSchema.index({ title: 1, author: 1, language:1 }, { unique: true });
+
 const Book = model("Book", bookSchema);
 module.exports = Book;
