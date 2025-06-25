@@ -1,10 +1,13 @@
 const express = require("express");
 const multer = require('multer');
+const fs = require('fs');
+
 const {
     addBook,
     getAllBooks
 } = require("../controllers/booksController")
 const { pdfToString } = require('../functions/fileConversions')
+const { stringToWordList } = require('../functions/stringManipulation')
 const router = express.Router();
 const upload = multer({ dest: '../../assets/uploads' })
 
@@ -22,7 +25,11 @@ router.post("/convert-pdf", upload.single('pdfFile'), async (req, res) => {
 
     try {
         const extractedText = await pdfToString(filePath);
-        res.json({ text: extractedText });
+        const wordList = stringToWordList(extractedText);
+        res.json({ 
+            text: extractedText,
+            wordList
+        });
     } catch (error) {
         console.error('Error processing PDF on server:', error);
         res.status(500).json({ message: 'Error converting PDF to text', error: error.message });

@@ -11,10 +11,10 @@ async function getAllBooks(req, res, next) {
 
 async function addBook(req, res, next) {
   try {
-    const { title, wordlist, author, language } = req.body;
+    const { title, wordList, author, language } = req.body;
     const book = new Book({
       title,
-      wordlist,
+      wordList,
       author,
       language
     });
