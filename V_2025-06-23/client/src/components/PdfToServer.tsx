@@ -10,6 +10,10 @@ const PdfToServerConverter = () => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState(null);
     const [isDragOver, setIsDragOver] = useState(false);
+    const [title, setTitle] = useState('');
+    const [author, setAuthor] = useState('');
+    const [language, setLanguage] = useState('russian');
+
 
     const sendPdfToServer = async (file) => {
         setIsProcessing(true);
@@ -20,6 +24,9 @@ const PdfToServerConverter = () => {
         // Create a FormData object to send the file
         const formData = new FormData();
         formData.append('pdfFile', file); // 'pdfFile' must match the field name in multer: upload.single('pdfFile')
+        formData.append('title', title)
+        formData.append('author', author)
+        formData.append('language', language)
 
         try {
             const response = await fetch(`${serverAddress}/books/convert-pdf`, {
@@ -33,7 +40,7 @@ const PdfToServerConverter = () => {
             }
 
             const result = await response.json();
-            console.log(result)
+            // console.log(result)
             setPdfText(result.text);
             setWordList(result.wordList);
         } catch (err) {
@@ -82,12 +89,25 @@ const PdfToServerConverter = () => {
                     ...styles.dropZone,
                     borderColor: isDragOver ? '#007bff' : '#ccc',
                     backgroundColor: isDragOver ? '#e6f7ff' : '#f9f9f9',
+                    color: "black"
                 }}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
             >
-                <p>Drag & Drop your PDF file here, or</p>
+                <label>title: </label>
+                <input name='title' onChange={(e) => setTitle(e.target.value)} />
+                <br></br>
+                <label>author: </label>
+                <input name='author' onChange={(e) => setAuthor(e.target.value)} />
+                <br></br>
+                <label>language: </label>
+                <select onChange={(e) => setLanguage(e.target.value)}>
+                    <option value={"russian"}>russian</option>
+                    <option value={"english"}>english</option>
+                    <option value={"hebrew"}>hebrew</option>
+                </select>
+                <br></br>
                 <input
                     id="file-upload-server" // Unique ID
                     type="file"
@@ -95,6 +115,7 @@ const PdfToServerConverter = () => {
                     onChange={handleFileInputChange}
                     style={{ display: 'none' }} // Hide the actual input
                 />
+                <p>Drag & Drop your PDF file here, or</p>
                 <label htmlFor="file-upload-server" style={styles.fileInputLabel}>
                     Choose a PDF File
                 </label>
@@ -119,7 +140,7 @@ const PdfToServerConverter = () => {
                 <div>
                     oppp
                     {wordList.map((object) => {
-                        return <div key={object.word} style={{color:"black"}}>{object.word}:{object.count}</div>
+                        return <div key={object.word} style={{ color: "black" }}>{object.word}:{object.count}</div>
                     })}
                 </div>
             )}

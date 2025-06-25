@@ -9,9 +9,24 @@ async function getAllBooks(req, res, next) {
   }
 }
 
-async function addBook(req, res, next) {
+// async function addBook(req, res, next) {
+//   try {
+//     const { title, wordList, author, language } = req.body;
+//     const book = new Book({
+//       title,
+//       wordList,
+//       author,
+//       language
+//     });
+//     const result = await book.save();
+//     res.status(201).json(result);
+//   } catch (error) {
+//     next(error);
+//   }
+// }
+
+async function addBook(title, wordList, author, language) {
   try {
-    const { title, wordList, author, language } = req.body;
     const book = new Book({
       title,
       wordList,
@@ -19,9 +34,9 @@ async function addBook(req, res, next) {
       language
     });
     const result = await book.save();
-    res.status(201).json(result);
+    return result;
   } catch (error) {
-    next(error);
+    console.log(error)
   }
 }
 

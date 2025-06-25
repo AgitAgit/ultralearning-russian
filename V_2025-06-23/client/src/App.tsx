@@ -6,7 +6,7 @@ function App() {
 
   return (
     <>
-      <PingServer></PingServer>
+      {/* <PingServer></PingServer> */}
       <br></br>
       <PdfToServerConverter></PdfToServerConverter>
     </>

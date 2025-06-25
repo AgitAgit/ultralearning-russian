@@ -13,13 +13,13 @@ build a server
 2.1. Add a book module. DONE.
 2.2. Add controller and routes to add and get books. DONE.
 2.3. extract a string from a pdf file DONE.
-2.4. extract the wordList from the string, and send only those to the db.
+2.4. extract the wordList from the string, and send only those to the db. DONE.
 2.5. Add a vocabulary array to user and a route to add word/words to it.
 3. write a string manipulation module to extract vocabulary. (Might be moved to the client later)
 
 build a client
 1. get ping from server DONE.
-2. send a pdf to the server
+2. send a pdf to the server DONE.
 
 for the next version:
 -add user authentication (oAuth? Auth0?)
