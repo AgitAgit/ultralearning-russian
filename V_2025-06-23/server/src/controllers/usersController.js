@@ -76,6 +76,26 @@ async function login(req, res, next) {
   }
 }
 
+async function addWordsToUser(username, words){
+  const user = await User.findOne({username})
+  const newWordsToAdd = words.filter(word => !user.words.includes(word));
+  if (newWordsToAdd.length > 0) {
+    // Only push if there are new words to add
+    user.words.push(...newWordsToAdd);
+    const result = await user.save();
+    return result;
+  }
+  else {
+    console.log(`No new words to add for user '${username}'. All words already exist.`);
+    return user;
+  }
+}
+
+async function getUserWords(username){
+  const user = await User.findOne({username})
+  return user.words
+}
+
 async function logout(req, res, next) {
   try {
     
@@ -117,6 +137,8 @@ module.exports = {
   logout,
   updateUserData,
   deleteUser,
+  addWordsToUser,
+  getUserWords
 };
 
 // export const deleteUserById = async function (req, res, next) {

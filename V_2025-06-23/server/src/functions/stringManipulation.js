@@ -27,6 +27,64 @@ function stringToWordList(str) {
   return wordList;
 }
 
+/**
+ * 
+ * @param { string[] } knownWords 
+ * @param {string[]} bookWords 
+ * @returns The percent of known words
+ */
+function uniquePercent(knownWords, bookWords) {
+  // Handle edge cases where arrays might be empty
+  if (!bookWords || bookWords.length === 0) {
+    return 0; // If there are no book words, 0% are known.
+  }
+
+  if (!knownWords || knownWords.length === 0) {
+    return 0; // If there are no known words, 0% of book words can be known.
+  }
+
+  // Convert knownWords to a Set for efficient lookup (O(1) average time complexity)
+  const knownWordsSet = new Set(knownWords);
+
+  let knownWordCount = 0;
+  // Use a Set to track unique known words found in the book, to avoid counting duplicates in bookWords
+  const uniqueKnownBookWords = new Set();
+
+  for (const word of bookWords) {
+    if (knownWordsSet.has(word)) {
+      if (!uniqueKnownBookWords.has(word)) {
+        uniqueKnownBookWords.add(word);
+        knownWordCount++;
+      }
+    }
+  }
+
+  // Calculate the percentage
+  // We need the number of unique words in the book for the denominator
+  const uniqueBookWordsCount = new Set(bookWords).size;
+
+  if (uniqueBookWordsCount === 0) {
+    return 0; // Avoid division by zero if bookWords somehow contains only duplicates that were filtered out
+  }
+
+  const percentage = (knownWordCount / uniqueBookWordsCount) * 100;
+
+  return percentage;
+}
+
+// This will be the percent of known words out of all the words in the book,
+// not just the unique ones.
+/**
+ * 
+ * @param {*} knownWords 
+ * @param {*} bookWords 
+ */
+function weightedPercent(knownWords, bookWords){
+
+}
+
+
 module.exports = {
-    stringToWordList
+  stringToWordList,
+  uniquePercent
 }

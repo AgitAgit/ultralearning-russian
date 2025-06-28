@@ -9,6 +9,27 @@ async function getAllBooks(req, res, next) {
   }
 }
 
+async function getSingleBook(title, author, language){
+  try {
+    const book = await Book.findOne({title, author, language})
+    return book;
+  } catch (error) {
+    console.log(error)
+    throw new Error(error);
+  }
+}
+
+async function getCleanWordList(title, author, language){
+  try {
+    const book = await getSingleBook(title, author, language);
+    const words = book.wordList.map(item => item.word);
+    return words;
+  } catch (error) {
+    console.log(error)
+    throw new Error(error);
+  }
+}
+
 // async function addBook(req, res, next) {
 //   try {
 //     const { title, wordList, author, language } = req.body;
@@ -42,5 +63,6 @@ async function addBook(title, wordList, author, language) {
 
 module.exports = {
     addBook,
-    getAllBooks
+    getAllBooks,
+    getCleanWordList
 };
