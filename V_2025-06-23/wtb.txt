@@ -1,3 +1,4 @@
+V_2025-06-23
 STAGE 1
 2025/06/23 => 2025/06/29
 General plan:
@@ -18,6 +19,7 @@ build a server
 2.5. Add a vocabulary array to user and a route to add word/words to it. DONE.
 3. write a string manipulation module to extract vocabulary. (Might be moved to the client later) DONE.
 4. take a user and a book and compare percent of words known. DONE.
+5. add option to remove word from user's vocab. DONE.
 
 build a client
 1. get ping from server DONE.
@@ -35,5 +37,23 @@ has a name(the language) and a words array? (to reduce load on the db?)
 
 FIRST STAGE DONE.
 
-STAGE 2 version 2025-06-23
+V_2025-06-23
+STAGE 2 
 2025/06/29 => ?
+
+Create a flashcard system for the client.
+-flashcard schema: {
+    top:string,
+    bottom:string,
+    topLanguage:enum(allowed languages...)
+    bottomLanguage:enum(allowed languages...)
+}
+-Create a flashcard
+-Store a flashcard
+-display decks
+-play and rank words by known/not known
+-create some basic decks for russian => english and english => hebrew (100 cards per deck tops)
+-allow users to add cards/decks
+-get cards/decks by user
+-add the option to upvote a deck
+-add sort by votes

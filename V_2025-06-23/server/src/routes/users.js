@@ -8,6 +8,7 @@ const {
   updateUserData,
   deleteUser,
   addWordsToUser,
+  removeWordsFromUser,
   getUserWords
 } = require("../controllers/usersController.js");
 
@@ -33,6 +34,17 @@ router.post("/add-words", async (req, res) => {
   try {
     const { username, words } = req.body;
     const result = await addWordsToUser(username, words)
+    res.json(result);
+  } catch (error) {
+    console.log(error)
+    res.status(500).json("something went wrong...")
+  }
+})
+
+router.post("/remove-words", async (req, res) => {
+  try {
+    const { username, words } = req.body;
+    const result = await removeWordsFromUser(username, words)
     res.json(result);
   } catch (error) {
     console.log(error)

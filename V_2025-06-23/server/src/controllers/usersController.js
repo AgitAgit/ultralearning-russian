@@ -91,6 +91,19 @@ async function addWordsToUser(username, words){
   }
 }
 
+async function removeWordsFromUser(username, words){
+  try {
+    
+    const user = await User.findOne({username})
+    user.words.pull(...words)
+    const result = await user.save()
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error)  
+  }
+}
+
 async function getUserWords(username){
   const user = await User.findOne({username})
   return user.words
@@ -138,6 +151,7 @@ module.exports = {
   // updateUserData,
   deleteUser,
   addWordsToUser,
+  removeWordsFromUser,
   getUserWords
 };
 
