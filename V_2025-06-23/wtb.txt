@@ -42,18 +42,24 @@ STAGE 2
 2025/06/29 => ?
 
 Create a flashcard system for the client.
--flashcard schema: {
+
+SERVER
+DONE-flashcard schema: {
     top:string,
     bottom:string,
     topLanguage:enum(allowed languages...)
     bottomLanguage:enum(allowed languages...)
 }
+DONE-create route to add flashcard and to get all flashcards
+DONE-create a deck schema
+-add a "add-to-deck" route in the flashcards route and controller
+
+CLIENT
 -Create a flashcard
 -Store a flashcard
 -display decks
 -play and rank words by known/not known
 -create some basic decks for russian => english and english => hebrew (100 cards per deck tops)
 -allow users to add cards/decks
--get cards/decks by user
 -add the option to upvote a deck
 -add sort by votes

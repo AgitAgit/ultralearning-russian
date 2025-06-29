@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const users = require('./routes/users')
 const books = require('./routes/books')
+const flashcards = require('./routes/flashcards')
 
 // Load environment variables
 dotenv.config();
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
 // routes
 app.use('/users', users)
 app.use('/books', books)
+app.use('/flashcards', flashcards)
 
 // Basic route
 app.get('/', (req, res) => {
