@@ -29,12 +29,8 @@ router.post("/convert-pdf", upload.single('pdfFile'), async (req, res) => {
         const extractedText = await pdfToString(filePath);
         const wordList = stringToWordList(extractedText);
         const result = await addBook(title, wordList, author, language)
-        console.log(result)
+        // console.log(result)
         res.json({result})
-        // res.json({ 
-        //     text: extractedText,
-        //     wordList
-        // });
     } catch (error) {
         console.error('Error processing PDF on server:', error);
         res.status(500).json({ message: 'Error converting PDF to text', error: error.message });

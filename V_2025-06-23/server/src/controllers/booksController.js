@@ -2,8 +2,16 @@ const Book = require("../models/Book.js");
 
 async function getAllBooks(req, res, next) {
   try {
-    const books = await Book.find();
-    res.json(books);
+    const books = await Book.find().lean();
+    //Temp section start for testing
+    const booksWithUniqueWordCount = books.map(book => {
+      console.log(book)
+      book["uniqueWordCount"] = book.wordList.length
+      return book;
+    })
+    res.json(booksWithUniqueWordCount);
+    //Temp section end
+    // res.json(books);
   } catch (error) {
     next(error);
   }

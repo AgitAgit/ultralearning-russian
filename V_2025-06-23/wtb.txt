@@ -1,4 +1,5 @@
-2025/06/23 => ?
+STAGE 1
+2025/06/23 => 2025/06/29
 General plan:
 An app that records a user's vocabulary and recommends the next read based on the
 vocabulary of books.
@@ -15,12 +16,15 @@ build a server
 2.3. extract a string from a pdf file DONE.
 2.4. extract the wordList from the string, and send only those to the db. DONE.
 2.5. Add a vocabulary array to user and a route to add word/words to it. DONE.
-3. write a string manipulation module to extract vocabulary. (Might be moved to the client later)
-4. take a user and a book and compare percent of words known.
+3. write a string manipulation module to extract vocabulary. (Might be moved to the client later) DONE.
+4. take a user and a book and compare percent of words known. DONE.
 
 build a client
 1. get ping from server DONE.
 2. send a pdf to the server DONE.
+
+-prevent duplicate words from being added to the user's vocab DONE.
+-revert the words object so it's plain string. I can make it more complex in further versions if need be. DONE.
 
 for the next version:
 -add user authentication (oAuth? Auth0?)
@@ -28,3 +32,8 @@ for the next version:
 -add strength for each user word?
 -?create an array of languages for each user. each language object 
 has a name(the language) and a words array? (to reduce load on the db?)
+
+FIRST STAGE DONE.
+
+STAGE 2 version 2025-06-23
+2025/06/29 => ?

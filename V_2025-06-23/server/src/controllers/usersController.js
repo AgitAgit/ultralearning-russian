@@ -104,20 +104,20 @@ async function logout(req, res, next) {
   }
 }
 
-async function updateUserData(req, res, next) {
-  try {
-    const { userWithNewData } = req.body
-    const existingUser = await User.findOne({username:userWithNewData.username});
-    if (!existingUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    const updatedUser = await User.findByIdAndUpdate(existingUser._id, userWithNewData);
+// async function updateUserData(req, res, next) {
+//   try {
+//     const { userWithNewData } = req.body
+//     const existingUser = await User.findOne({username:userWithNewData.username});
+//     if (!existingUser) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+//     const updatedUser = await User.findByIdAndUpdate(existingUser._id, userWithNewData);
     
-    res.status(201).json({ message: "User updated successfully!", updatedUser });
-  } catch (error) {
-    next(error);
-  }
-}
+//     res.status(201).json({ message: "User updated successfully!", updatedUser });
+//   } catch (error) {
+//     next(error);
+//   }
+// }
 
 async function deleteUser(req, res, next) {
   try {
@@ -135,7 +135,7 @@ module.exports = {
   getUserByUsername,
   login,
   logout,
-  updateUserData,
+  // updateUserData,
   deleteUser,
   addWordsToUser,
   getUserWords

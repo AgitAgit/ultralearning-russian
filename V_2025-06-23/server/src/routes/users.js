@@ -51,12 +51,18 @@ router.get("/words/:username", async (req, res) => {
   }
 })
 
-router.post("/known-words", async (req, res) => {
+router.post("/known-words-percent", async (req, res) => {
+  try {
+
     const { username, title, author, language } = req.body
     const words = await getUserWords(username)
     const bookWords = await getCleanWordList(title, author, language);
-    // last here bookmark
-    // const knownPercent =
+    const knownPercent = Math.round(uniquePercent(words, bookWords) * 100) / 100 //Will this cover all language cases?
+    res.json({username, title, knownPercent})
+  } catch (error) {
+    console.log(error)
+    res.status(500).json("something went wrong...")
+  }
 })
 
 // router.post("/logout", logout);
