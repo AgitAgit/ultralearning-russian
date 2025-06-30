@@ -1,5 +1,5 @@
 // const jwt = require("jsonwebtoken");
-// const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 const User = require("../models/User.js");
 
 async function getAllUsers(req, res, next) {
@@ -25,11 +25,11 @@ async function getUserByUsername(req, res, next){
 async function addUser(req, res, next) {
   try {
     const { username, password } = req.body;
-    // const hashedPass = await bcrypt.hash(password, 10);
+    const hashedPass = await bcrypt.hash(password, 10);
     const user = new User({
       username,
-      password
-      // password: hashedPass,
+      // password
+      password: hashedPass,
       // plainPassword:password
     });
     const result = await user.save();
@@ -50,8 +50,8 @@ async function login(req, res, next) {
     // console.log("stored user:", storedUser);
     if (!storedUser)
       return res.json({ message: `could not find user with username ${username}`, login:false});
-    // const isValid = bcrypt.compareSync(password, storedUser.password); //use bcrypt to test if the login password matches the stored one
-    const isValid = username === storedUser.username;
+    const isValid = bcrypt.compareSync(password, storedUser.password); //use bcrypt to test if the login password matches the stored one
+    // const isValid = password === storedUser.password;
     if (!isValid)
       return res.json({ message: "Invalid password...", login:false });
     // const token = jwt.sign(

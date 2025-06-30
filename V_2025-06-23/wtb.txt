@@ -54,12 +54,17 @@ DONE-create route to add flashcard and to get all flashcards
 DONE-create a deck schema
 DONE-add "create-deck","add-to-deck","remove-from-deck" routes in the flashcards route and controller
 
+
 CLIENT
+-create login page and simple logged in user  tracking
+
+-create profile page with vocabulary
+
 -Create a flashcard
 -Store a flashcard
 -display decks
 -play and rank words by known/not known
--create some basic decks for russian => english and english => hebrew (100 cards per deck tops)
+-create some basic decks for russian => english and english => hebrew (100 cards per deck tops) (can use gemini to generate cards)
 -allow users to add cards/decks
 -add the option to upvote a deck
 -add sort by votes
