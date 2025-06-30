@@ -52,7 +52,7 @@ DONE-flashcard schema: {
 }
 DONE-create route to add flashcard and to get all flashcards
 DONE-create a deck schema
--add a "add-to-deck" route in the flashcards route and controller
+DONE-add "create-deck","add-to-deck","remove-from-deck" routes in the flashcards route and controller
 
 CLIENT
 -Create a flashcard
