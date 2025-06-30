@@ -2,9 +2,7 @@ import './App.css'
 import PingServer from './components/PingServer'
 import PdfToServerConverter from './components/PdfToServer'
 import StateCenter from './components/StateCenter'
-
-import LoginPage from './pages/LoginPage'
-import Login from './components/Login'
+import Display from './pages/Display'
 
 function App() {
 
@@ -12,10 +10,8 @@ function App() {
     <>
       <StateCenter>
         {/* <PingServer></PingServer> */}
-        <br></br>
         {/* <PdfToServerConverter></PdfToServerConverter> */}
-        {/* <LoginPage /> */}
-        <Login/>
+        <Display />
       </StateCenter>
     </>
   )

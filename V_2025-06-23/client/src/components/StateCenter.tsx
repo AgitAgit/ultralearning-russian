@@ -4,6 +4,7 @@ const initialAppState = {
   theme: 'light',
   user: null, // Can be an object { id: string, name: string, isLoggedIn: boolean } or null
   notifications: [], // Array of strings
+  currentPage:"login"
   // Add more state properties as needed
 };
 
@@ -12,7 +13,7 @@ const initialAppState = {
 // though the Provider will override this.
 export const AppContext = createContext({
   state: initialAppState,
-  setState: () => {}, // Placeholder for the setState function
+  setState: (prev) => {}, // Placeholder for the setState function
 });
 
 /**
