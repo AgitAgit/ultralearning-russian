@@ -5,16 +5,16 @@ import { AppContext } from '../components/StateCenter';
 const Home = () => {
     const { state, setState } = useContext(AppContext)
 
-    const [username, setUsername] = useState(state.user.username)
+    // const [username, setUsername] = useState(state.user.username)
 
-    useEffect(() => {
-        console.log(state.user)
-        setUsername(state.user.username)
-    },[state.user])
+    // useEffect(() => {
+    //     setUsername(state.user.username)
+    // },[state.user])
 
     return (
         <>
-            <div>{`Hello ${username}`}</div>        
+            {/* <div>{`Hello ${username}`}</div>         */}
+            <div>{`Hello ${state.user.username}`}</div>        
         </>
     )
 }

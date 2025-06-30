@@ -70,7 +70,7 @@ async function login(req, res, next) {
     console.log("a user has logged in...");
     res.status(200)
     // .cookie("jwt",token)
-    .json({ message: `User ${username} logged in successfully.`, login:true });
+    .json({ message: `User ${username} logged in successfully.`, login:true, username });
     } catch (error) {
     next(error);
   }

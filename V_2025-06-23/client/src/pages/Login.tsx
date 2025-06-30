@@ -46,7 +46,8 @@ const Login = () => {
                     console.log("Login successful:", userData);
                     setSuccessMessage("Login successful! Welcome.");
                     // last here bookmark check what does userData looks like.
-                    setState((prev) => { return { ...prev, user: { username: userData.username }, currentPage:"home" } })
+                    setState((prev) => { return { ...prev, user: { username: userData.username } } })
+                    setState((prev) => { return { ...prev, currentPage: "home" } })
                     // In a real app, you'd store user data/token and redirect.
                 } else {
                     throw new Error("Login failed");
