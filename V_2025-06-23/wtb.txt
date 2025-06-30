@@ -70,3 +70,6 @@ CLIENT
 -allow users to add cards/decks
 -add the option to upvote a deck
 -add sort by votes
+
+
+//last place:bookmark in the Login page

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { login, signup } from './CommunicationCenter';
-import { AppContext } from './StateCenter';
+import { login, signup } from '../components/CommunicationCenter';
+import { AppContext } from '../components/StateCenter';
 
 const Login = () => {
     // State variables for username, password, loading status, and error messages
@@ -45,7 +45,8 @@ const Login = () => {
                 if (userData.login) {
                     console.log("Login successful:", userData);
                     setSuccessMessage("Login successful! Welcome.");
-                    setState((prev) => { return { ...prev, user: { username: userData.username } } })
+                    // last here bookmark check what does userData looks like.
+                    setState((prev) => { return { ...prev, user: { username: userData.username }, currentPage:"home" } })
                     // In a real app, you'd store user data/token and redirect.
                 } else {
                     throw new Error("Login failed");
