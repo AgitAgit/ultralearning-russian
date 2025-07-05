@@ -1,9 +1,24 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect, use } from 'react';
+import { getUserVocab } from './CommunicationCenter';
 
-const initialAppState = {
+type AppState = {
+  serverAddress: string; // The address of the server
+  theme: 'light' | 'dark'; // Theme of the application
+  user: {
+    username: string | null; // Username of the logged-in user
+    vocabulary: string[]; // Vocabulary list for the user
+  }; // User information, can be an object or null
+  notifications: string[]; // Array of notifications
+  currentPage: string; // Current page in the application (e.g., "login", "home", etc.)
+}
+
+const initialAppState:AppState = {
   serverAddress: 'http://localhost:3000', // Default server address
   theme: 'light',
-  user: null, // Can be an object { id: string, name: string, isLoggedIn: boolean } or null
+  user: {
+    username: null,
+    vocabulary: [],
+  }, // Can be an object { id: string, name: string, isLoggedIn: boolean } or null
   notifications: [], // Array of strings
   currentPage:"login"
   // Add more state properties as needed
@@ -28,6 +43,16 @@ export const AppContext = createContext({
 const StateCenter = ({ children }) => {
   // Use React's useState hook to manage the central application state.
   const [state, setState] = useState(initialAppState);
+  
+  useEffect(() => {
+    const fetchUserVocab = async (username) => {
+      const vocab = await getUserVocab(state.serverAddress, username);
+      setState(prevState => ({...prevState, user: {...prevState.user, vocabulary: vocab}}));
+    }
+    if (state.user.username) {
+      fetchUserVocab(state.user.username)
+    }
+  }, [state.user.username]);
 
   // The context value that will be provided to consumers.
   // This object contains the current state and the function to update it.

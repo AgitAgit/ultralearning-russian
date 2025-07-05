@@ -9,6 +9,9 @@ import ProfilePage from './ProfilePage';
 import BooksPage from './BooksPage';
 import PracticePage from './PracticePage';
 
+/**
+ * Display component is the central app component.
+ */
 const Display = () => {
     const { state, setState } = useContext(AppContext)
     return (

@@ -4,7 +4,8 @@ const fs = require('fs');
 
 const {
     addBook,
-    getAllBooks
+    getAllBooks,
+    getBooks
 } = require("../controllers/booksController")
 const { pdfToString } = require('../functions/fileConversions')
 const { stringToWordList } = require('../functions/stringManipulation')
@@ -12,7 +13,26 @@ const router = express.Router();
 const upload = multer({ dest: '../../assets/uploads' })
 
 
-router.get("/", getAllBooks)
+// router.get("/", getAllBooks)
+
+router.get("/", async (req, res) => {
+    const { limit, offset, language, author, title } = req.query;
+    try {
+        const books = await getBooks(
+            parseInt(limit) || 10,
+            parseInt(offset) || 0,
+            language || null,
+            author || null,
+            title || null
+        );
+        res.json(books);
+    } catch (error) {
+        console.error('Error fetching books:', error);
+        res.status(500).json({ message: 'Error fetching books', error: error.message });
+    }
+})
+
+
 
 // router.post("/", addBook)
 

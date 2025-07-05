@@ -62,7 +62,16 @@ DONE-navigate between pages using conditional rendering and the State center
 
 DONE-move the server address to the state center
 
--create profile page with vocabulary
+DONE-create profile page with vocabulary
+
+-fetch books for the books page and get data about percentage
+of user knowledge
+
+-create some easy way for the user to add words to his vocabulary
+(for now I can supply a list)
+
+-on the client side, separate the vocabulary to languages. 
+(For now can be done functionally, later should be stored separately.)
 
 -Create a flashcard
 -Store a flashcard

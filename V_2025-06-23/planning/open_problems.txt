@@ -1,0 +1,2 @@
+How do I deal with phrases like "Как дела?" or "Доброе утро"?
+For now I can add the separate words from which they are made.

@@ -1,0 +1,6 @@
+Data modeling:
+Need to separate words into languages. 
+(
+    for each user an array of languages, each with an array of words?
+    Or, one large array of words and each user has arrays of references?
+)

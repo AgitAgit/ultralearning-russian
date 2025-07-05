@@ -9,8 +9,6 @@ function App() {
   return (
     <>
       <StateCenter>
-        {/* <PingServer></PingServer> */}
-        {/* <PdfToServerConverter></PdfToServerConverter> */}
         <Display />
       </StateCenter>
     </>
