@@ -56,9 +56,11 @@ DONE-add "create-deck","add-to-deck","remove-from-deck" routes in the flashcards
 
 
 CLIENT
--create login page and simple logged in user tracking DONE
+DONE-create login page and simple logged in user tracking DONE
 
--navigate between pages using conditional rendering and the State center
+DONE-navigate between pages using conditional rendering and the State center
+
+DONE-move the server address to the state center
 
 -create profile page with vocabulary
 
@@ -73,3 +75,7 @@ CLIENT
 
 
 //last place:bookmark in the Login page
+
+Possibilities:
+-add origin language and target language choice to the header.
+-add hebrew ui in addition to the english ui.

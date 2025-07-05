@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { AppContext } from '../components/StateCenter';
 
+import Header from '../components/Header';
 import Login from './Login';
 import Home from './Home';
 import PdfToServer from '../components/PdfToServer';
-import Header from '../components/Header';
-
+import ProfilePage from './ProfilePage';
+import BooksPage from './BooksPage';
+import PracticePage from './PracticePage';
 
 const Display = () => {
     const { state, setState } = useContext(AppContext)
@@ -23,6 +25,15 @@ const Display = () => {
                 }
                 {state.currentPage === "pdftoserver" && 
                     <PdfToServer />
+                }
+                {state.currentPage === "profile" &&
+                    <ProfilePage />
+                }
+                {state.currentPage === "books" &&
+                    <BooksPage />
+                }
+                {state.currentPage === "practice" &&
+                    <PracticePage />
                 }
             </div>
     )

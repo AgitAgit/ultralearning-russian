@@ -1,6 +1,5 @@
-const SERVER_ADDRESS = "http://localhost:3000"
 
-export async function login(username:string, password:string) {
+export async function login(SERVER_ADDRESS, username:string, password:string) {
     try {
         const response = await fetch(`${SERVER_ADDRESS}/users/login`, {
             method: 'POST',
@@ -31,7 +30,7 @@ export async function login(username:string, password:string) {
     }
 }
 
-export async function signup(username:string, password:string) {
+export async function signup(SERVER_ADDRESS, username:string, password:string) {
     try {
         const response = await fetch(`${SERVER_ADDRESS}/users/signup`, {
             method: 'POST',

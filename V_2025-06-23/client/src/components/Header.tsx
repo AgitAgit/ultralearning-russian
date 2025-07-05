@@ -3,7 +3,7 @@ import { AppContext } from './StateCenter';
 
 function Header() {
     const { state, setState } = useContext(AppContext)
-    const pages = ["Login", "Home", "pdf to server"]
+    const pages = ["Login", "Home", "pdf to server", "Profile", "Books", "Practice"]
     return (
         <header style={{
             // border:"1px solid black"

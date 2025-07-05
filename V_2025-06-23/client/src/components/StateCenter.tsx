@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 
 const initialAppState = {
+  serverAddress: 'http://localhost:3000', // Default server address
   theme: 'light',
   user: null, // Can be an object { id: string, name: string, isLoggedIn: boolean } or null
   notifications: [], // Array of strings

@@ -11,7 +11,7 @@ const Login = () => {
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [isLogin, setIsLogin] = useState(true); // New state to toggle between login and signup
-
+    const SERVER_ADDRESS = state.serverAddress || 'http://localhost:3000'; // Use server address from context or default
     /**
      * Handles changes in the input fields and updates the corresponding state.
      * @param {Object} e - The event object from the input change.
@@ -41,7 +41,7 @@ const Login = () => {
         try {
             if (isLogin) {
                 // Call the login function
-                const userData = await login(username, password);
+                const userData = await login(SERVER_ADDRESS, username, password);
                 if (userData.login) {
                     console.log("Login successful:", userData);
                     setSuccessMessage("Login successful! Welcome.");
@@ -54,7 +54,7 @@ const Login = () => {
                 }
             } else {
                 // Call the signup function
-                const userData = await signup(username, password);
+                const userData = await signup(SERVER_ADDRESS, username, password);
                 if (userData.username) {
                     console.log("Signup successful:", userData);
                     setSuccessMessage("Account created successfully! You can now log in.");

@@ -1,9 +1,11 @@
 // src/components/PdfToServerConverter.jsx
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
+import { AppContext } from './StateCenter'; 
 
-const serverAddress = 'http://localhost:3000'
 
 const PdfToServerConverter = () => {
+    const { state, setState } = useContext(AppContext);
+    const serverAddress = state.serverAddress || 'http://localhost:3000'
     const [pdfText, setPdfText] = useState('');
     const [wordList, setWordList] = useState(null);
     const [fileName, setFileName] = useState('');
