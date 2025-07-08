@@ -92,6 +92,10 @@ export async function getUserVocab(SERVER_ADDRESS, username:string) {
 export async function getBooks(SERVER_ADDRESS:string, limit:number = 10, offset:number = 0, language = null, author = null, title = null) {
     try {
         let queryString = "";
+        queryString += `limit=${limit}&&offset=${offset}`
+        if(language) queryString += `&&language=${language}`
+        if(author) queryString += `&&author=${author}`
+        if(title) queryString += `&&title=${title}`
         const response = await fetch(`${SERVER_ADDRESS}/books?${queryString}`, {
             method: 'GET',
             headers: {
