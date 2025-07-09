@@ -5,6 +5,8 @@ import { AppContext } from './StateCenter';
 // bookmark last here 2025/07/08 validation fails because the book title is not passed
 // correctly or something like that
 // Gemini says: The most likely reason why the title, author, and language fields are not being recognized by your server is due to how Multer processes the incoming multipart/form-data request.
+// 2025/07/09 When I clicked the "choose a pdf file" instead of the drag and drop
+// functionality it did work.
 const PdfToServerConverter = () => {
     const { state, setState } = useContext(AppContext);
     const serverAddress = state.serverAddress || 'http://localhost:3000'

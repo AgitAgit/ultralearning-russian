@@ -121,3 +121,24 @@ export async function getBooks(SERVER_ADDRESS:string, limit:number = 10, offset:
         throw error; // Let the caller handle the error
     }
 }
+
+export async function getBookPercent(SERVER_ADDRESS:string, username:string, title:string, author:string, language:string){
+    try {
+        const response = await fetch(`${SERVER_ADDRESS}/users/known-words-percent`, {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                username,
+                title,
+                author,
+                language
+            })
+        })
+        const data = await response.json()
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+}
