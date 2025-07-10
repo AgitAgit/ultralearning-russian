@@ -1,5 +1,5 @@
 
-export async function login(SERVER_ADDRESS, username:string, password:string) {
+export async function login(SERVER_ADDRESS:string, username:string, password:string) {
     try {
         const response = await fetch(`${SERVER_ADDRESS}/users/login`, {
             method: 'POST',
@@ -30,7 +30,7 @@ export async function login(SERVER_ADDRESS, username:string, password:string) {
     }
 }
 
-export async function signup(SERVER_ADDRESS, username:string, password:string) {
+export async function signup(SERVER_ADDRESS:string, username:string, password:string) {
     try {
         const response = await fetch(`${SERVER_ADDRESS}/users/signup`, {
             method: 'POST',
@@ -61,7 +61,7 @@ export async function signup(SERVER_ADDRESS, username:string, password:string) {
     }
 }
 
-export async function getUserVocab(SERVER_ADDRESS, username:string) {
+export async function getUserVocab(SERVER_ADDRESS:string, username:string) {
     try {
         const response = await fetch(`${SERVER_ADDRESS}/users/words/${username}`, {
             method: 'GET',
@@ -134,6 +134,44 @@ export async function getBookPercent(SERVER_ADDRESS:string, username:string, tit
                 title,
                 author,
                 language
+            })
+        })
+        const data = await response.json()
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function addToUserVocab(SERVER_ADDRESS:string, username:string, words:string[]){
+    try {
+        const response = await fetch(`${SERVER_ADDRESS}/users/add-words`, {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                username,
+                words
+            })
+        })
+        const data = await response.json()
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function removeFromUserVocab(SERVER_ADDRESS:string, username:string, words:string[]){
+    try {
+        const response = await fetch(`${SERVER_ADDRESS}/users/remove-words`, {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                username,
+                words
             })
         })
         const data = await response.json()
