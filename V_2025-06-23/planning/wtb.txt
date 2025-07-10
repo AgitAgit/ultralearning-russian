@@ -64,7 +64,7 @@ DONE-move the server address to the state center
 
 DONE-create profile page with vocabulary
 
--fetch books for the books page and get data about percentage
+DONE-fetch books for the books page and get data about percentage
 of user knowledge
 
 -create some easy way for the user to add words to his vocabulary

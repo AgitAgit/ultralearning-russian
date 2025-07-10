@@ -26,6 +26,8 @@ const headerStyles = {
 const BooksPage = () => {
     const { state, setState } = useContext(AppContext)
     const [books, setBooks] = useState(null)
+    const [uniqueKnownPercent, setUniqueKnownPercent] = useState(null)
+    const [booksWithPercentage, setBooksWithPercentage] = useState(null)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,8 +36,27 @@ const BooksPage = () => {
             setBooks(data)
         }
         fetchData();
-    }, [])
+    }, [state.user.username])
 
+    useEffect(() => {
+        const fetchData = async () => {
+            if (books) {
+                const newBooksPromiseResults = await Promise.allSettled(books.map(async (book) => {
+                    if (state.user && state.user.username) {
+                        const data = await getBookPercent(state.serverAddress, state.user.username, book.title, book.author, book.language)
+                        book.uniqueKnownPercent = data.knownPercent;
+                        // console.log("percent book", data)
+                        // console.log("percent book", book)
+                        return book
+                    }
+                }))
+                const newBooks = newBooksPromiseResults.filter((promise) => promise.status === "fulfilled").map((promise) => {return promise.value})
+                console.log("newBooks",newBooks)
+                setBooksWithPercentage(newBooks)
+            }
+        }
+        fetchData();
+    }, [books])
     // useEffect(() => {
     //     const fetchData = async () => {
     //         if (books && books[0] && state.user.username) {
@@ -69,43 +90,43 @@ const BooksPage = () => {
     //     }
     // }, [books, state.user.username])
 
-    useEffect(() => {
-        const fetchDataAndCalculatePercentages = async () => {
-            // Ensure books and username are available
-            if (!books || books.length === 0 || !state.user.username) {
-                return; // Exit if conditions not met
-            }
+    // useEffect(() => {
+    //     const fetchDataAndCalculatePercentages = async () => {
+    //         // Ensure books and username are available
+    //         if (!books || books.length === 0 || !state.user.username) {
+    //             return; // Exit if conditions not met
+    //         }
 
-            // Create a new array to store updated books
-            const updatedBooks = await Promise.all(
-                books.map(async (book) => {
-                    try {
-                        const response = await getBookPercent(
-                            state.serverAddress,
-                            state.user.username,
-                            book.title,
-                            book.author,
-                            book.language
-                        );
-                        console.log(response);
-                        return {
-                            ...book,
-                            uniqueKnownPercentage: response.knownPercent,
-                        };
-                    } catch (error) {
-                        console.error("Error fetching percentage for book:", book.title, error);
-                        return { ...book, uniqueKnownPercentage: null }; // Handle errors gracefully
-                    }
-                })
-            );
+    //         // Create a new array to store updated books
+    //         const updatedBooks = await Promise.all(
+    //             books.map(async (book) => {
+    //                 try {
+    //                     const response = await getBookPercent(
+    //                         state.serverAddress,
+    //                         state.user.username,
+    //                         book.title,
+    //                         book.author,
+    //                         book.language
+    //                     );
+    //                     console.log(response);
+    //                     return {
+    //                         ...book,
+    //                         uniqueKnownPercentage: response.knownPercent,
+    //                     };
+    //                 } catch (error) {
+    //                     console.error("Error fetching percentage for book:", book.title, error);
+    //                     return { ...book, uniqueKnownPercentage: null }; // Handle errors gracefully
+    //                 }
+    //             })
+    //         );
 
-            // Update the state once with the new array
-            setBooks(updatedBooks);
-        };
+    //         // Update the state once with the new array
+    //         setBooks(updatedBooks);
+    //     };
 
-        fetchDataAndCalculatePercentages();
+    //     fetchDataAndCalculatePercentages();
 
-    }, [state.user.username]);
+    // }, [state.user.username]);
 
     return (
         <>
@@ -120,7 +141,7 @@ const BooksPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {books &&
+                    {books && !booksWithPercentage &&
                         books.map((book, index) => {
                             // Apply conditional background for zebra stripping
                             const rowBackgroundColor = index % 2 === 0 ? '#f9f9f9' : 'white'; // Even rows lighter grey
@@ -137,6 +158,28 @@ const BooksPage = () => {
                                     <td style={cellStyles}>{book.author}</td>
                                     <td style={cellStyles}>{book.language}</td>
                                     <td style={cellStyles}>{book.knownPercent || "?"}</td> {/* Placeholder */}
+                                </tr>
+                            );
+                        })}
+                </tbody>
+                <tbody>
+                    {booksWithPercentage &&
+                        booksWithPercentage.map((book, index) => {
+                            // Apply conditional background for zebra stripping
+                            const rowBackgroundColor = index % 2 === 0 ? '#f9f9f9' : 'white'; // Even rows lighter grey
+                            const rowStyles = {
+                                backgroundColor: rowBackgroundColor,
+                                // You could add a hover effect with state if purely inline,
+                                // but CSS classes are more common and performant for :hover.
+                                // For example: onMouseEnter, onMouseLeave to toggle a state and apply style.
+                            };
+
+                            return (
+                                <tr key={book.title} style={rowStyles}>
+                                    <td style={cellStyles}>{book.title}</td>
+                                    <td style={cellStyles}>{book.author}</td>
+                                    <td style={cellStyles}>{book.language}</td>
+                                    <td style={cellStyles}>{book.uniqueKnownPercent === null || book.uniqueKnownPercent === undefined ? "?" : book.uniqueKnownPercent}</td>
                                 </tr>
                             );
                         })}
