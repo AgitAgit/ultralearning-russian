@@ -10,6 +10,8 @@ type AppState = {
   }; // User information, can be an object or null
   notifications: string[]; // Array of notifications
   currentPage: string; // Current page in the application (e.g., "login", "home", etc.)
+  currentTargetLanguage: "russian" | "english"; // Current target language for the user
+  currentSourceLanguage: "english" | "hebrew"; // Current source language for the user
 }
 
 const initialAppState:AppState = {
@@ -20,7 +22,9 @@ const initialAppState:AppState = {
     vocabulary: [],
   }, // Can be an object { id: string, name: string, isLoggedIn: boolean } or null
   notifications: [], // Array of strings
-  currentPage:"login"
+  currentPage:"login",
+  currentTargetLanguage: "russian", // Default target language
+  currentSourceLanguage: "english", // Default source language
   // Add more state properties as needed
 };
 

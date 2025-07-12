@@ -13,6 +13,16 @@ function Header() {
                     onClick={() => setState(prev => { return { ...prev, currentPage: page.toLowerCase().replaceAll(" ","") } })}>
                     {page}
                 </button>)}
+            <label>Target Language:</label>
+            <select  onChange={(e) => setState(prev => { return { ...prev, currentTargetLanguage: e.target.value } })}>
+                <option value="russian">Russian</option>
+                <option value="english">English</option>
+            </select>
+            <label>User's Language:</label>
+            <select onChange={(e) => setState(prev => { return { ...prev, currentSourceLanguage: e.target.value } })}>
+                <option value="english">English</option>
+                <option value="russian">Russian</option>
+            </select>
         </header>
     );
 }

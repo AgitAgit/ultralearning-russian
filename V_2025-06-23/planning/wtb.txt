@@ -69,6 +69,8 @@ of user knowledge
 
 DONE-create some easy way for the user to add words to his vocabulary
 
+-add target and current language to the state center and the header
+
 -add a counter to the vocabulary
 
 -move the word adding/removing from the server to the state center, as response to state change.

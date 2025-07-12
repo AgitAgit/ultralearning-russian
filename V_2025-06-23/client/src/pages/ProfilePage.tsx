@@ -6,17 +6,20 @@ import { RussianCommon100 } from '../components/wordPacks/Russian_common_100';
 
 const ProfilePage = () => {
     const { state, setState } = useContext(AppContext)
-    const vocab = state.user.vocabulary || [];
-
+    const vocab = (state.user.vocabulary || []).filter(word => {
+        if (state.currentTargetLanguage === "russian") {
+            return /[а-яА-ЯёЁ]/.test(word);
+        } else if (state.currentTargetLanguage === "english") {
+            return /^[a-zA-Z]+$/.test(word);
+        }
+        return true;
+    });
+    const yourVocabularyHeading = `Your ${state.currentTargetLanguage} Vocabulary`;
     return (
         <>
-            This is the profile page
-            { state.user && state.user.username &&
-                <div>{`Hello ${state.user.username}`}</div>        
-            }
             <WordAdder wordPacks={[{title:"pack1", words:["да","нет","не"]},{title:"pack2", words:["как","нет"]}, RussianCommon100]} />
             <div>
-                <h2>Your Vocabulary</h2>
+                <h2>{yourVocabularyHeading}</h2>
                 {vocab.length > 0 ? (
                     <ul>
                         {vocab.map((word, index) => (
