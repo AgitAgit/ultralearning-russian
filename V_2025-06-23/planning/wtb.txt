@@ -67,8 +67,9 @@ DONE-create profile page with vocabulary
 DONE-fetch books for the books page and get data about percentage
 of user knowledge
 
--create some easy way for the user to add words to his vocabulary
-(for now I can supply a list)
+DONE-create some easy way for the user to add words to his vocabulary
+
+-add a counter to the vocabulary
 
 -move the word adding/removing from the server to the state center, as response to state change.
 Other components should interact with the state value.

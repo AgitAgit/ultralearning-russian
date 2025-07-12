@@ -112,7 +112,7 @@ export async function getBooks(SERVER_ADDRESS:string, limit:number = 10, offset:
         }
 
         const data = await response.json();
-        console.log("Fetched books data...:", data);
+        // console.log("Fetched books data...:", data);
         return data;
 
     } catch (error) {

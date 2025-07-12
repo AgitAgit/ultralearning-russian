@@ -32,7 +32,7 @@ const BooksPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             const data = await getBooks(state.serverAddress)
-            console.log(data)
+            // console.log(data)
             setBooks(data)
         }
         fetchData();
@@ -45,92 +45,19 @@ const BooksPage = () => {
                     if (state.user && state.user.username) {
                         const data = await getBookPercent(state.serverAddress, state.user.username, book.title, book.author, book.language)
                         book.uniqueKnownPercent = data.knownPercent;
-                        // console.log("percent book", data)
-                        // console.log("percent book", book)
                         return book
                     }
                 }))
                 const newBooks = newBooksPromiseResults.filter((promise) => promise.status === "fulfilled").map((promise) => {return promise.value})
-                console.log("newBooks",newBooks)
+                // console.log("newBooks",newBooks)
                 setBooksWithPercentage(newBooks)
             }
         }
         fetchData();
     }, [books])
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         if (books && books[0] && state.user.username) {
-    //             books.forEach(async (book) => {
-    //                 const response = await getBookPercent(state.serverAddress, state.user.username, book.title, book.author, book.language)
-    //                 console.log(response)
-    //                 // book["uniqueKnownPercentage"] = response.knownPercent;
-    //                 // Update the state using setBooks
-    //                 setBooks(prevBooks => {
-    //                     // Map over the previous books array
-    //                     return prevBooks.map(b => {
-    //                         // If this is the book we're currently processing, create a new object
-    //                         // with the added uniqueKnownPercentage property
-    //                         if (b.title === book.title && b.author === book.author && b.language === book.language) {
-    //                             return {
-    //                                 ...b, // Copy all existing properties
-    //                                 uniqueKnownPercentage: response.knownPercent // Add the new property
-    //                             };
-    //                         }
-    //                         // Otherwise, return the book unchanged
-    //                         return b;
-    //                     });
-    //                 });
-    //             })
-    //             // setBooks(prev => prev)
-    //         }
-    //     }
-    //     fetchData();
-    //     if (books && books[0] && books[0]["uniqueKnownPercentage"]) {
-    //         console.log("test", books[0]["uniqueKnownPercentage"])
-    //     }
-    // }, [books, state.user.username])
-
-    // useEffect(() => {
-    //     const fetchDataAndCalculatePercentages = async () => {
-    //         // Ensure books and username are available
-    //         if (!books || books.length === 0 || !state.user.username) {
-    //             return; // Exit if conditions not met
-    //         }
-
-    //         // Create a new array to store updated books
-    //         const updatedBooks = await Promise.all(
-    //             books.map(async (book) => {
-    //                 try {
-    //                     const response = await getBookPercent(
-    //                         state.serverAddress,
-    //                         state.user.username,
-    //                         book.title,
-    //                         book.author,
-    //                         book.language
-    //                     );
-    //                     console.log(response);
-    //                     return {
-    //                         ...book,
-    //                         uniqueKnownPercentage: response.knownPercent,
-    //                     };
-    //                 } catch (error) {
-    //                     console.error("Error fetching percentage for book:", book.title, error);
-    //                     return { ...book, uniqueKnownPercentage: null }; // Handle errors gracefully
-    //                 }
-    //             })
-    //         );
-
-    //         // Update the state once with the new array
-    //         setBooks(updatedBooks);
-    //     };
-
-    //     fetchDataAndCalculatePercentages();
-
-    // }, [state.user.username]);
 
     return (
         <>
-            This is the books page
             <table style={tableStyles}>
                 <thead>
                     <tr>
