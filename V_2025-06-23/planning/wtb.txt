@@ -70,6 +70,11 @@ of user knowledge
 -create some easy way for the user to add words to his vocabulary
 (for now I can supply a list)
 
+-move the word adding/removing from the server to the state center, as response to state change.
+Other components should interact with the state value.
+
+-make sure all words are added/stored in lowercase
+
 -on the client side, separate the vocabulary to languages. 
 (For now can be done functionally, later should be stored separately.)
 

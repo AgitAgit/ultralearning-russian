@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AppContext } from '../components/StateCenter';
 import { getUserVocab } from '../components/CommunicationCenter';
+import WordAdder from '../components/WordAdder';
 
 const ProfilePage = () => {
     const { state, setState } = useContext(AppContext)
@@ -24,6 +25,7 @@ const ProfilePage = () => {
                     <p>No vocabulary words found.</p>
                 )}
             </div>
+            <WordAdder words={["Как","как","да"]} />
         </>
     )
 }
