@@ -3,6 +3,7 @@ import { AppContext } from '../components/StateCenter';
 import { getUserVocab } from '../components/CommunicationCenter';
 import WordAdder from '../components/WordAdder';
 import { RussianCommon100 } from '../components/wordPacks/Russian_common_100';
+import { RussianCommon250 } from '../components/wordPacks/Russian_common_250';
 
 const ProfilePage = () => {
     const { state, setState } = useContext(AppContext)
@@ -14,10 +15,10 @@ const ProfilePage = () => {
         }
         return true;
     });
-    const yourVocabularyHeading = `Your ${state.currentTargetLanguage} Vocabulary`;
+    const yourVocabularyHeading = `Your ${state.currentTargetLanguage} Vocabulary has ${vocab.length} words`;
     return (
         <>
-            <WordAdder wordPacks={[{title:"pack1", words:["да","нет","не"]},{title:"pack2", words:["как","нет"]}, RussianCommon100]} />
+            <WordAdder wordPacks={[{title:"pack1", words:["да","нет","не"]},{title:"pack2", words:["как","нет"]}, RussianCommon100, RussianCommon250]} />
             <div>
                 <h2>{yourVocabularyHeading}</h2>
                 {vocab.length > 0 ? (
