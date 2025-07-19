@@ -49,7 +49,7 @@ const BooksPage = () => {
                     }
                 }))
                 const newBooks = newBooksPromiseResults.filter((promise) => promise.status === "fulfilled").map((promise) => {return promise.value})
-                // console.log("newBooks",newBooks)
+                console.log("newBooks",newBooks)
                 setBooksWithPercentage(newBooks)
             }
         }
@@ -65,6 +65,7 @@ const BooksPage = () => {
                         <th style={headerStyles}>author</th>
                         <th style={headerStyles}>language</th>
                         <th style={headerStyles}>unique known words percentage</th>
+                        <th style={headerStyles}>unique words in book</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -85,6 +86,7 @@ const BooksPage = () => {
                                     <td style={cellStyles}>{book.author}</td>
                                     <td style={cellStyles}>{book.language}</td>
                                     <td style={cellStyles}>{book.knownPercent || "?"}</td> {/* Placeholder */}
+                                    <td style={cellStyles}>{book.wordList.length}</td>
                                 </tr>
                             );
                         })}
@@ -107,6 +109,7 @@ const BooksPage = () => {
                                     <td style={cellStyles}>{book.author}</td>
                                     <td style={cellStyles}>{book.language}</td>
                                     <td style={cellStyles}>{book.uniqueKnownPercent === null || book.uniqueKnownPercent === undefined ? "?" : book.uniqueKnownPercent}</td>
+                                    <td style={cellStyles}>{book.wordList.length}</td>
                                 </tr>
                             );
                         })}
