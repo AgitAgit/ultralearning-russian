@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, use } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { getUserVocab } from './CommunicationCenter';
+import { addToUserVocab } from '../components/CommunicationCenter';
 
 type AppState = {
   serverAddress: string; // The address of the server
@@ -8,13 +9,16 @@ type AppState = {
     username: string | null; // Username of the logged-in user
     vocabulary: string[]; // Vocabulary list for the user
   }; // User information, can be an object or null
+  addWordToUserVocab: (word: string, username:string) => Promise<void>; // Function to add a word to the user's vocabulary
+  removeWordFromUserVocab: (word: string, username:string) => Promise<void>; // Function to remove a word from the user's vocabulary
   notifications: string[]; // Array of notifications
   currentPage: string; // Current page in the application (e.g., "login", "home", etc.)
   currentTargetLanguage: "russian" | "english"; // Current target language for the user
   currentSourceLanguage: "english" | "hebrew"; // Current source language for the user
+
 }
 
-const initialAppState:AppState = {
+const initialAppState: AppState = {
   serverAddress: 'http://localhost:3000', // Default server address
   theme: 'light',
   user: {
@@ -22,7 +26,7 @@ const initialAppState:AppState = {
     vocabulary: [],
   }, // Can be an object { id: string, name: string, isLoggedIn: boolean } or null
   notifications: [], // Array of strings
-  currentPage:"login",
+  currentPage: "login",
   currentTargetLanguage: "russian", // Default target language
   currentSourceLanguage: "english", // Default source language
   // Add more state properties as needed
@@ -33,7 +37,7 @@ const initialAppState:AppState = {
 // though the Provider will override this.
 export const AppContext = createContext({
   state: initialAppState,
-  setState: (prev) => {}, // Placeholder for the setState function
+  setState: (prev) => { }, // Placeholder for the setState function
 });
 
 /**
@@ -47,16 +51,37 @@ export const AppContext = createContext({
 const StateCenter = ({ children }) => {
   // Use React's useState hook to manage the central application state.
   const [state, setState] = useState(initialAppState);
-  
+
   useEffect(() => {
     const fetchUserVocab = async (username) => {
       const vocab = await getUserVocab(state.serverAddress, username);
-      setState(prevState => ({...prevState, user: {...prevState.user, vocabulary: vocab}}));
+      setState(prevState => ({ ...prevState, user: { ...prevState.user, vocabulary: vocab } }));
     }
     if (state.user.username) {
       fetchUserVocab(state.user.username)
     }
   }, [state.user.username]);
+
+  async function addWordToUserVocab(word: string, username: string) {
+    console.log("state.user.username:", state.user.username);
+    console.log("@ss")
+    console.log("Adding word:", word);
+    const words = word.split(/[, .]+/).map(w => w.trim().toLowerCase()).filter(w => w !== '');
+    await addToUserVocab(state.serverAddress, username, words);
+    // should add a check to see if the words were added successfully
+    setState((prevState) => ({
+      ...prevState,
+      user: {
+        ...prevState.user,
+        vocabulary: [...prevState.user.vocabulary, ...words]
+      }
+    }));
+
+  }
+  useEffect(() => {
+    console.log("Setting addWordToUserVocab function in state");
+    setState((prevState) => ({ ...prevState, addWordToUserVocab }));
+  }, []);
 
   // The context value that will be provided to consumers.
   // This object contains the current state and the function to update it.

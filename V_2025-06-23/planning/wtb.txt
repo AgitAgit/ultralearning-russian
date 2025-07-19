@@ -73,8 +73,7 @@ DONE-add target and current language to the state center and the header
 
 DONE-add a counter to the vocabulary
 
-POSTPONED FOR NEXT VERSION-move the word adding/removing from the server to the state center, as response to state change.
-Other components should interact with the state value.
+-move the word adding/removing from the server to the state center, as part of the state.
 
 DONE(in client)-make sure all words are added/stored in lowercase
 
@@ -90,9 +89,12 @@ DONE(in client)-make sure all words are added/stored in lowercase
 -add the option to upvote a deck
 -add sort by votes
 
+-add portuguese support
+-add features requested by Matan
+
 
 //last place:bookmark in the Login page
 
 Possibilities:
--add origin language and target language choice to the header.
+DONE-add origin language and target language choice to the header.
 -add hebrew ui in addition to the english ui.

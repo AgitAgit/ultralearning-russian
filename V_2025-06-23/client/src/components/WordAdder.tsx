@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AppContext } from './StateCenter';
 import { addToUserVocab, removeFromUserVocab } from './CommunicationCenter';
-import { RussianCommon100 } from './wordPacks/Russian_common_100';
 // should I add/remove words one by one, or wait some time and batch them?
 // I could add some debounce.
 export type wordPack = {
@@ -18,19 +17,20 @@ function WordAdder({ wordPacks }: { wordPacks: wordPack[] }) {
     //     setWordPacksDisplay([...wordPacks, RussianCommon100]);
     // }, []);
     
-    async function addWord(word: string) {
-        if( state.user.username && word) {
-            const words = word.split(/[, .]+/).map(w => w.trim().toLowerCase()).filter(w => w !== '');
-            addToUserVocab(state.serverAddress, state.user.username, words);
-            setState((prevState: any) => ({
-                ...prevState,
-                user: {
-                    ...prevState.user,
-                    vocabulary: [...prevState.user.vocabulary, ...words]
-                }
-            }));
-        }
-    }
+    const addWord = state.addWordToUserVocab;
+    // async function addWord(word: string) {
+    //     if( state.user.username && word) {
+    //         const words = word.split(/[, .]+/).map(w => w.trim().toLowerCase()).filter(w => w !== '');
+    //         addToUserVocab(state.serverAddress, state.user.username, words);
+    //         setState((prevState: any) => ({
+    //             ...prevState,
+    //             user: {
+    //                 ...prevState.user,
+    //                 vocabulary: [...prevState.user.vocabulary, ...words]
+    //             }
+    //         }));
+    //     }
+    // }
 
     async function handleCheckboxChange(word: string, checked: boolean) {
         if (checked && state.user.username) {
@@ -68,7 +68,7 @@ function WordAdder({ wordPacks }: { wordPacks: wordPack[] }) {
             <h2>Add Words to Vocabulary</h2>
             <div>
                 <input onChange={(e) => setStringInput(e.target.value)}/>
-                <button onClick={() => addWord(stringInput)}>Add Word</button>
+                <button onClick={() => addWord(stringInput, state.user.username || "null")}>Add Word</button>
             </div>
             <ul style={{ listStyle: 'none', padding: 0 }}>
                 {wordPacksDisplay.map((pack, packIndex) => (
