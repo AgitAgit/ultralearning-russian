@@ -1,6 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const serverless = require('serverless-http');
+const cors = require('cors');
 
 const users = require('./routes/users')
 const books = require('./routes/books')
@@ -14,6 +16,7 @@ const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -114,9 +117,14 @@ process.on('SIGINT', () => {
     });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-  console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🌐 URL: http://localhost:${PORT}`);
-});
+// Only start the server if we're not in a Lambda environment
+if (process.env.AWS_LAMBDA_FUNCTION_NAME === undefined) {
+  // Start server
+  app.listen(PORT, () => {
+    console.log(`🚀 Server is running on port ${PORT}`);
+    console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🌐 URL: http://localhost:${PORT}`);
+  });
+}
+
+module.exports.handler = serverless(app);

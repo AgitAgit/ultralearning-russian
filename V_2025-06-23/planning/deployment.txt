@@ -1,0 +1,52 @@
+react client: static fronted application. Deployed to static hosting service like amazon s3,
+in combination with amazon cloudfront for content delivery.
+
+nodejs server: backend api, could be deployed to aws lambda, triggered by amazon api gateway.
+
+Setting up a deployment pipeline from a monorepo (single GitHub repo with separate React client and Node.js server folders) to AWS Lambda requires a few key considerations. Here's a breakdown of the process, including popular tools and best practices:
+
+Understanding the Challenge
+You have two distinct applications within one repository:
+
+React Client: This is a static frontend application that, after being built, consists of HTML, CSS, JavaScript, and other static assets. It doesn't typically run on Lambda directly for serving, but rather is deployed to a static hosting service like Amazon S3, often fronted by Amazon CloudFront for content delivery and caching.
+
+Node.js Server: This is your backend API, which is a good candidate for AWS Lambda. Each API endpoint or logical function can be mapped to a separate Lambda function, triggered by Amazon API Gateway.
+
+The challenge in a monorepo is to build and deploy these independent components selectively when changes occur in their respective folders.
+
+Recommended Tools and Services
+Here are the primary AWS services and third-party tools you'll likely use:
+
+AWS Services:
+
+1.AWS Lambda: For running your server-side Node.js code without managing servers.
+
+2.Amazon API Gateway: To create RESTful APIs or WebSocket APIs that act as the front door for your Lambda functions, exposing them to the internet.
+
+3.Amazon S3: For hosting your built React static assets.
+
+4.Amazon CloudFront: A Content Delivery Network (CDN) to serve your React application globally with low latency and SSL.
+
+5.AWS CodeCommit/CodePipeline/CodeBuild (or GitHub Actions): For your CI/CD pipeline. Since your code is on GitHub, GitHub Actions is a natural fit for seamless integration.
+
+6. AWS IAM: For managing permissions for your Lambda functions and other AWS resources.
+
+7. AWS CloudFormation / AWS SAM / Terraform / Serverless Framework: For Infrastructure as Code (IaC), to define and deploy your AWS resources programmatically. This is crucial for repeatable and consistent deployments.
+
+Third-Party Tools (for IaC and deployment convenience):
+
+Serverless Framework: A powerful CLI that helps you build, deploy, and manage serverless applications. It abstracts away much of the CloudFormation complexity. It's excellent for managing multiple Lambda functions and their associated API Gateway endpoints.
+
+AWS Serverless Application Model (AWS SAM): An open-source framework for building serverless applications. It's a CloudFormation extension that provides a simpler syntax for defining serverless resources.
+
+Terraform: An infrastructure-as-code tool that allows you to define and provision infrastructure across various cloud providers, including AWS. It's very flexible but can have a steeper learning curve for serverless specifics compared to Serverless Framework or AWS SAM.
+
+
+for the client:
+set up s3 bucket for hosting and cloudfront distribution
+
+for the server:
+set up serverless framework
+define lambda functions, api gateway endpoints, iam roles,...
+
+CI/CD pipeline (github actions)
