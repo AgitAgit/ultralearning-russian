@@ -13,6 +13,10 @@ functions:
     handler: src/index.handler
     events:
       - http:
+          path: /
+          method: any
+          cors: true
+      - http:
           path: /{proxy+}
           method: any
           cors: true

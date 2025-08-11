@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require('multer');
 const fs = require('fs');
+const path = require('path');
 
 const {
     addBook,
@@ -10,7 +11,21 @@ const {
 const { pdfToString } = require('../functions/fileConversions')
 const { stringToWordList } = require('../functions/stringManipulation')
 const router = express.Router();
-const upload = multer({ dest: '../../assets/uploads' })
+
+// Choose a writable upload directory. In AWS Lambda only /tmp is writable.
+const isRunningInLambda = !!process.env.AWS_LAMBDA_FUNCTION_NAME;
+const defaultLocalUploadDir = path.join(__dirname, '..', '..', 'assets', 'uploads');
+const defaultLambdaUploadDir = path.join('/tmp', 'uploads');
+const resolvedUploadDir = process.env.FILE_UPLOAD_DIR || (isRunningInLambda ? defaultLambdaUploadDir : defaultLocalUploadDir);
+
+// Ensure the directory exists (safe for both local and Lambda /tmp)
+try {
+    fs.mkdirSync(resolvedUploadDir, { recursive: true });
+} catch (e) {
+    // Do not crash on mkdir errors; multer will attempt as well
+}
+
+const upload = multer({ dest: resolvedUploadDir })
 
 
 // router.get("/", getAllBooks)

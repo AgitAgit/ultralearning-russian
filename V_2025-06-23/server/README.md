@@ -33,7 +33,7 @@ npm start
 ```
 
 ## Available Endpoints
-
+- base server endpoint `https://cyzsz3jxw0.execute-api.us-east-1.amazonaws.com/dev`
 - `GET /` - Welcome message and server status
 - `GET /health` - Health check endpoint
 - `GET /api/hello` - Sample API endpoint
