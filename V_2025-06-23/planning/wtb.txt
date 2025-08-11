@@ -98,3 +98,5 @@ DONE(in client)-make sure all words are added/stored in lowercase
 Possibilities:
 DONE-add origin language and target language choice to the header.
 -add hebrew ui in addition to the english ui.
+-add a feature that takes the user's vocab or part of it and asks some llm
+to produce a simple story based on it with some new words sprinkled in.
