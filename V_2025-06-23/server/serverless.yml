@@ -1,4 +1,5 @@
 service: ULR-server
+frameworkVersion: ~3.38.0
 
 provider:
   name: aws

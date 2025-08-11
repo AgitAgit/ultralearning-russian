@@ -39,8 +39,11 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      - name: Install Serverless Framework v3
+        run: npm install -g serverless@^3
+
       - name: Deploy with Serverless (dev stage)
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-        run: npx serverless deploy --stage dev --verbose
+        run: serverless deploy --stage dev --verbose
 
