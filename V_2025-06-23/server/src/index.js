@@ -43,7 +43,7 @@ app.use('/flashcards', flashcards)
 // Basic route
 app.get('/', (req, res) => {
   res.json({
-    message: 'Welcome to the Ultralearning Russian API',
+    message: 'pong,',
     status: 'Server is running',
     timestamp: new Date().toISOString()
   });

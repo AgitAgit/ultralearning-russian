@@ -1,0 +1,46 @@
+name: Deploy Serverless (dev on main)
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "V_2025-06-23/server/**"
+      - ".github/workflows/deploy.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy to AWS
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: V_2025-06-23/server
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: V_2025-06-23/server/package-lock.json
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Deploy with Serverless (dev stage)
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: npx serverless deploy --stage dev --verbose
+

@@ -92,7 +92,7 @@ DONE(in client)-make sure all words are added/stored in lowercase
 -add portuguese support
 -add features requested by Matan
 
-
+DONE deploy server to aws lambda
 //last place:bookmark in the Login page
 
 Possibilities:
