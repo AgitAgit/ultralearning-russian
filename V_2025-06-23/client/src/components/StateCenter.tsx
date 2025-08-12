@@ -18,13 +18,17 @@ type AppState = {
 
 }
 
+import { getServerUrl } from '../config/serverConfig';
+
 const initialAppState: AppState = {
-  serverAddress: 'http://localhost:3000', // Default server address
+  serverAddress: getServerUrl(), // Use config file
   theme: 'light',
   user: {
     username: null,
     vocabulary: [],
   }, // Can be an object { id: string, name: string, isLoggedIn: boolean } or null
+  addWordToUserVocab: async () => {}, // Placeholder function
+  removeWordFromUserVocab: async () => {}, // Placeholder function
   notifications: [], // Array of strings
   currentPage: "login",
   currentTargetLanguage: "russian", // Default target language
@@ -37,7 +41,7 @@ const initialAppState: AppState = {
 // though the Provider will override this.
 export const AppContext = createContext({
   state: initialAppState,
-  setState: (prev) => { }, // Placeholder for the setState function
+  setState: (prev: any) => { }, // Placeholder for the setState function
 });
 
 /**
@@ -48,12 +52,12 @@ export const AppContext = createContext({
  * @param {object} props - The component props.
  * @param {React.ReactNode} props.children - The child components that will have access to the context.
  */
-const StateCenter = ({ children }) => {
+const StateCenter = ({ children }: { children: React.ReactNode }) => {
   // Use React's useState hook to manage the central application state.
   const [state, setState] = useState(initialAppState);
 
   useEffect(() => {
-    const fetchUserVocab = async (username) => {
+    const fetchUserVocab = async (username: string) => {
       const vocab = await getUserVocab(state.serverAddress, username);
       setState(prevState => ({ ...prevState, user: { ...prevState.user, vocabulary: vocab } }));
     }

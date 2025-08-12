@@ -28,6 +28,12 @@ jobs:
           cd V_2025-06-23/client
           npm ci
           
+      - name: Update server config for production
+        run: |
+          cd V_2025-06-23/client
+          # Replace localhost with production server URL
+          sed -i 's|http://localhost:3000|${{ secrets.PRODUCTION_SERVER_URL }}|g' src/config/serverConfig.ts
+          
       - name: Build client
         run: |
           cd V_2025-06-23/client

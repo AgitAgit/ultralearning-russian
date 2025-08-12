@@ -94,6 +94,10 @@ DONE(in client)-make sure all words are added/stored in lowercase
 
 DONE deploy server to aws lambda
 DONE add workflow so pushing to main will deploy server to dev
+DONE deploy client with cloudfront
+add workflow so pushing to main will deploy client
+
+change things so the deployed client will aim at the deployed server
 
 //last place:bookmark in the Login page
 
