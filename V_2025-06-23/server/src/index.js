@@ -101,8 +101,6 @@ const connectDB = async () => {
       maxPoolSize: 10, // Limit connection pool size for Lambda
       serverSelectionTimeoutMS: 5000, // 5 second timeout
       socketTimeoutMS: 45000, // 45 second socket timeout
-      bufferMaxEntries: 0, // Disable mongoose buffering
-      bufferCommands: false, // Disable mongoose buffering
       useNewUrlParser: true,
       useUnifiedTopology: true,
     };
