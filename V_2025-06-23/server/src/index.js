@@ -34,6 +34,20 @@ app.use((req, res, next) => {
   }
 });
 
+// Ensure database connection before handling requests
+const ensureConnection = async (req, res, next) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      console.log('🔄 Reconnecting to MongoDB...');
+      await connectDB();
+    }
+    next();
+  } catch (error) {
+    console.error('❌ Failed to ensure MongoDB connection:', error.message);
+    res.status(500).json({ error: 'Database connection failed' });
+  }
+};
+
 // Apply connection middleware BEFORE routes
 app.use(ensureConnection);
 
@@ -124,19 +138,6 @@ const connectDB = async () => {
   return connectionPromise;
 };
 
-// Ensure database connection before handling requests
-const ensureConnection = async (req, res, next) => {
-  try {
-    if (mongoose.connection.readyState !== 1) {
-      console.log('🔄 Reconnecting to MongoDB...');
-      await connectDB();
-    }
-    next();
-  } catch (error) {
-    console.error('❌ Failed to ensure MongoDB connection:', error.message);
-    res.status(500).json({ error: 'Database connection failed' });
-  }
-};
 
 // 404 handler
 //this is causing a crash
