@@ -53,7 +53,11 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'OK',
     uptime: process.uptime(),
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    mongodb: {
+      connected: mongoose.connection.readyState === 1,
+      readyState: mongoose.connection.readyState
+    }
   });
 });
 
@@ -67,6 +71,72 @@ app.get('/api/hello', (req, res) => {
     }
   });
 });
+
+// MongoDB connection function with retry logic
+let isConnected = false;
+let connectionPromise = null;
+
+const connectDB = async () => {
+  // If already connected, return existing connection
+  if (isConnected && mongoose.connection.readyState === 1) {
+    console.log('📦 MongoDB already connected');
+    return mongoose.connection;
+  }
+
+  // If there's already a connection attempt in progress, wait for it
+  if (connectionPromise) {
+    return connectionPromise;
+  }
+
+  // Create new connection promise
+  connectionPromise = (async () => {
+    try {
+      // Close existing connection if it exists
+      if (mongoose.connection.readyState !== 0) {
+        await mongoose.connection.close();
+      }
+
+      // Connection options optimized for Lambda
+      const options = {
+        maxPoolSize: 10, // Limit connection pool size for Lambda
+        serverSelectionTimeoutMS: 10000, // 10 second timeout for server selection
+        socketTimeoutMS: 45000, // 45 second socket timeout
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      };
+
+      await mongoose.connect(MONGODB_URI, options);
+      isConnected = true;
+      console.log('📦 Connected to MongoDB!');
+      return mongoose.connection;
+    } catch (err) {
+      console.error('❌ MongoDB connection error:', err.message);
+      isConnected = false;
+      throw err;
+    } finally {
+      connectionPromise = null;
+    }
+  })();
+
+  return connectionPromise;
+};
+
+// Ensure database connection before handling requests
+const ensureConnection = async (req, res, next) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      console.log('🔄 Reconnecting to MongoDB...');
+      await connectDB();
+    }
+    next();
+  } catch (error) {
+    console.error('❌ Failed to ensure MongoDB connection:', error.message);
+    res.status(500).json({ error: 'Database connection failed' });
+  }
+};
+
+// Apply connection middleware to all routes
+app.use(ensureConnection);
 
 // 404 handler
 //this is causing a crash
@@ -86,41 +156,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// MongoDB connection function with retry logic
-let isConnected = false;
 
-const connectDB = async () => {
-  if (isConnected) {
-    console.log('📦 MongoDB already connected');
-    return;
-  }
-
-  try {
-    // Connection options optimized for Lambda
-    const options = {
-      maxPoolSize: 10, // Limit connection pool size for Lambda
-      serverSelectionTimeoutMS: 5000, // 5 second timeout
-      socketTimeoutMS: 45000, // 45 second socket timeout
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    };
-
-    await mongoose.connect(MONGODB_URI, options);
-    isConnected = true;
-    console.log('📦 Connected to MongoDB!');
-  } catch (err) {
-    console.error('❌ MongoDB connection error:', err.message);
-    isConnected = false;
-    
-    // Don't exit in Lambda environment
-    if (process.env.AWS_LAMBDA_FUNCTION_NAME === undefined) {
-      process.exit(1);
-    }
-  }
-};
-
-// Initialize connection
-connectDB();
 
 mongoose.connection.on('connected', () => {
   console.log('Mongoose default connection open');
@@ -135,6 +171,16 @@ mongoose.connection.on('error', (err) => {
 mongoose.connection.on('disconnected', () => {
   console.log('Mongoose default connection disconnected');
   isConnected = false;
+  
+  // In Lambda environment, try to reconnect after a delay
+  if (process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    setTimeout(() => {
+      console.log('🔄 Attempting to reconnect to MongoDB...');
+      connectDB().catch(err => {
+        console.error('❌ Reconnection failed:', err.message);
+      });
+    }, 1000);
+  }
 });
 
 // Close the Mongoose connection when Node.js process ends
