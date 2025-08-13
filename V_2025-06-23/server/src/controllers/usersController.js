@@ -42,10 +42,10 @@ async function addUser(req, res, next) {
 async function login(req, res, next) {
   try {
     const { username, password } = req.body; 
-    if (!username || !password)
-      return res
-    .status(400)
-    .json({ message: "username and password are required...", login:false});
+    if (!username || !password){
+      console.log("username or password is missing", username, password);
+      return res.status(400).json({ message: "username and password are required...", login:false});
+    }
     const storedUser = await User.findOne({ username }); //check if the user exists and extract it from the db
     // console.log("stored user:", storedUser);
     if (!storedUser)
