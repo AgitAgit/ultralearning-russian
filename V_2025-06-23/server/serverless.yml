@@ -6,6 +6,8 @@ provider:
   runtime: nodejs22.x
   stage: ${opt:stage, 'dev'}
   region: "us-east-1"
+  timeout: 30
+  memorySize: 512
   environment:
     NODE_ENV: ${self:provider.stage}
     MONGODB_URI: ${env:MONGODB_URI}
@@ -13,6 +15,8 @@ provider:
 functions:
   api:
     handler: src/index.handler
+    timeout: 30
+    memorySize: 512
     events:
       - http:
           path: /

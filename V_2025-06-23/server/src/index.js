@@ -34,7 +34,6 @@ app.use((req, res, next) => {
   }
 });
 
-
 // routes
 app.use('/users', users)
 app.use('/books', books)
@@ -87,34 +86,65 @@ app.use((err, req, res, next) => {
   });
 });
 
-mongoose.connect(MONGODB_URI)
-    .then(() => {
-        console.log('📦 Connected to MongoDB!');
-    })
-    .catch((err) => {
-        console.error('❌ MongoDB connection error:', err.message);
-        // It's often good practice to exit if the DB connection is critical for the app
-        // process.exit(1);
-    });
+// MongoDB connection function with retry logic
+let isConnected = false;
+
+const connectDB = async () => {
+  if (isConnected) {
+    console.log('📦 MongoDB already connected');
+    return;
+  }
+
+  try {
+    // Connection options optimized for Lambda
+    const options = {
+      maxPoolSize: 10, // Limit connection pool size for Lambda
+      serverSelectionTimeoutMS: 5000, // 5 second timeout
+      socketTimeoutMS: 45000, // 45 second socket timeout
+      bufferMaxEntries: 0, // Disable mongoose buffering
+      bufferCommands: false, // Disable mongoose buffering
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    };
+
+    await mongoose.connect(MONGODB_URI, options);
+    isConnected = true;
+    console.log('📦 Connected to MongoDB!');
+  } catch (err) {
+    console.error('❌ MongoDB connection error:', err.message);
+    isConnected = false;
+    
+    // Don't exit in Lambda environment
+    if (process.env.AWS_LAMBDA_FUNCTION_NAME === undefined) {
+      process.exit(1);
+    }
+  }
+};
+
+// Initialize connection
+connectDB();
 
 mongoose.connection.on('connected', () => {
-    console.log('Mongoose default connection open');
+  console.log('Mongoose default connection open');
+  isConnected = true;
 });
 
 mongoose.connection.on('error', (err) => {
-    console.error('Mongoose default connection error: ' + err);
+  console.error('Mongoose default connection error: ' + err);
+  isConnected = false;
 });
 
 mongoose.connection.on('disconnected', () => {
-    console.log('Mongoose default connection disconnected');
+  console.log('Mongoose default connection disconnected');
+  isConnected = false;
 });
 
 // Close the Mongoose connection when Node.js process ends
 process.on('SIGINT', () => {
-    mongoose.connection.close(() => {
-        console.log('Mongoose default connection disconnected through app termination');
-        process.exit(0);
-    });
+  mongoose.connection.close(() => {
+    console.log('Mongoose default connection disconnected through app termination');
+    process.exit(0);
+  });
 });
 
 // Only start the server if we're not in a Lambda environment
