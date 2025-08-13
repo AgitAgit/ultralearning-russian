@@ -19,14 +19,43 @@ const MONGODB_URI = process.env.MONGODB_URI
 app.use(cors());
 
 // Body parsing middleware MUST come before any custom middleware
-// Parse JSON with more flexible options
+// Raw body parser - capture raw data first
+app.use((req, res, next) => {
+  let data = '';
+  
+  req.on('data', chunk => {
+    data += chunk;
+  });
+  
+  req.on('end', () => {
+    if (data) {
+      console.log('🔍 Raw data captured:', data);
+      req.rawBody = Buffer.from(data);
+      
+      // Try to parse as JSON immediately
+      try {
+        const trimmedData = data.trim();
+        if (trimmedData.startsWith('{') && trimmedData.endsWith('}')) {
+          console.log('🔍 Attempting to parse as JSON...');
+          req.body = JSON.parse(trimmedData);
+          console.log('✅ Successfully parsed JSON body:', req.body);
+        } else {
+          console.log('❌ Data does not appear to be JSON format');
+          req.body = {};
+        }
+      } catch (parseError) {
+        console.log('❌ Failed to parse as JSON:', parseError.message);
+        req.body = {};
+      }
+    }
+    next();
+  });
+});
+
+// Parse JSON with more flexible options (as backup)
 app.use(express.json({ 
   limit: '10mb',
-  verify: (req, res, buf) => {
-    // Log the raw buffer for debugging
-    console.log('🔍 Raw request buffer:', buf.toString());
-    req.rawBody = buf;
-  }
+  strict: false
 }));
 
 // Parse URL-encoded bodies
@@ -35,26 +64,7 @@ app.use(express.urlencoded({
   limit: '10mb'
 }));
 
-// Additional middleware to handle raw JSON if express.json() fails
-app.use((req, res, next) => {
-  if (req.body && typeof req.body === 'object' && Object.keys(req.body).length > 0) {
-    // Body already parsed, continue
-    next();
-  } else if (req.rawBody) {
-    // Try to parse raw body as JSON
-    try {
-      const bodyString = req.rawBody.toString();
-      console.log('🔍 Attempting to parse raw body:', bodyString);
-      req.body = JSON.parse(bodyString);
-      console.log('✅ Successfully parsed raw body:', req.body);
-    } catch (parseError) {
-      console.log('❌ Failed to parse raw body as JSON:', parseError.message);
-    }
-    next();
-  } else {
-    next();
-  }
-});
+
 
 // CORS middleware (for development)
 // TODO: add a check if the server is running in dev mode.
