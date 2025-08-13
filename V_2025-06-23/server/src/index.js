@@ -19,16 +19,57 @@ const MONGODB_URI = process.env.MONGODB_URI
 app.use(cors());
 
 // Body parsing middleware MUST come before any custom middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Parse JSON with more flexible options
+app.use(express.json({ 
+  limit: '10mb',
+  verify: (req, res, buf) => {
+    // Log the raw buffer for debugging
+    console.log('🔍 Raw request buffer:', buf.toString());
+    req.rawBody = buf;
+  }
+}));
+
+// Parse URL-encoded bodies
+app.use(express.urlencoded({ 
+  extended: true,
+  limit: '10mb'
+}));
+
+// Additional middleware to handle raw JSON if express.json() fails
+app.use((req, res, next) => {
+  if (req.body && typeof req.body === 'object' && Object.keys(req.body).length > 0) {
+    // Body already parsed, continue
+    next();
+  } else if (req.rawBody) {
+    // Try to parse raw body as JSON
+    try {
+      const bodyString = req.rawBody.toString();
+      console.log('🔍 Attempting to parse raw body:', bodyString);
+      req.body = JSON.parse(bodyString);
+      console.log('✅ Successfully parsed raw body:', req.body);
+    } catch (parseError) {
+      console.log('❌ Failed to parse raw body as JSON:', parseError.message);
+    }
+    next();
+  } else {
+    next();
+  }
+});
 
 // CORS middleware (for development)
 // TODO: add a check if the server is running in dev mode.
 // If not, limit the allowed origin to the deployed client?
 app.use((req, res, next) => {
+  // Log request details for debugging
+  console.log('🔍 Request method:', req.method);
+  console.log('🔍 Request URL:', req.url);
+  console.log('🔍 Content-Type header:', req.headers['content-type']);
+  console.log('🔍 Accept header:', req.headers['accept']);
+  
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  
   if (req.method === 'OPTIONS') {
     res.sendStatus(200);
   } else {
@@ -120,8 +161,8 @@ const connectDB = async () => {
         maxPoolSize: 10, // Limit connection pool size for Lambda
         serverSelectionTimeoutMS: 10000, // 10 second timeout for server selection
         socketTimeoutMS: 45000, // 45 second socket timeout
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
+        // useNewUrlParser: true, this is deprecated
+        // useUnifiedTopology: true, this is deprecated
       };
 
       await mongoose.connect(MONGODB_URI, options);
