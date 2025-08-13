@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 // If not, limit the allowed origin to the deployed client?
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   if (req.method === 'OPTIONS') {
     res.sendStatus(200);
@@ -33,6 +33,9 @@ app.use((req, res, next) => {
     next();
   }
 });
+
+// Apply connection middleware BEFORE routes
+app.use(ensureConnection);
 
 // routes
 app.use('/users', users)
@@ -134,9 +137,6 @@ const ensureConnection = async (req, res, next) => {
     res.status(500).json({ error: 'Database connection failed' });
   }
 };
-
-// Apply connection middleware to all routes
-app.use(ensureConnection);
 
 // 404 handler
 //this is causing a crash
