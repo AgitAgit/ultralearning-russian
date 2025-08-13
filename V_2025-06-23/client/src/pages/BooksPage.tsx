@@ -89,6 +89,15 @@ const BooksPage = () => {
         return <td style={cellStyles}>{book.uniqueKnownPercent}</td>;
     };
 
+
+    const navToSingleBookPage = (book) => {
+        setState({
+            ...state,
+            currentPage: "singlebook",
+            currentBook: book
+        })
+    }
+
     return (
         <>
             <div>
@@ -118,7 +127,7 @@ const BooksPage = () => {
 
                             return (
                                 <tr key={book.title} style={rowStyles}>
-                                    <td style={cellStyles}>{book.title}</td>
+                                    <td style={cellStyles} onClick={() => navToSingleBookPage({title:book.title, author:book.author, language:book.language, wordList:book.wordList})}>{book.title}</td>
                                     <td style={cellStyles}>{book.author}</td>
                                     <td style={cellStyles}>{book.language}</td>
                                     {renderPercentageCell(book)}
@@ -141,7 +150,7 @@ const BooksPage = () => {
 
                             return (
                                 <tr key={book.title} style={rowStyles}>
-                                    <td style={cellStyles}>{book.title}</td>
+                                    <td style={cellStyles} onClick={() => navToSingleBookPage({title:book.title, author:book.author, language:book.language, wordList:book.wordList})}>{book.title}</td>
                                     <td style={cellStyles}>{book.author}</td>
                                     <td style={cellStyles}>{book.language}</td>
                                     <td style={cellStyles}>{book.uniqueKnownPercent === null || book.uniqueKnownPercent === undefined ? "?" : book.uniqueKnownPercent}</td>

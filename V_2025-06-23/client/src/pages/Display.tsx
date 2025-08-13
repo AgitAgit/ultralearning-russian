@@ -8,6 +8,7 @@ import PdfToServer from '../components/PdfToServer';
 import ProfilePage from './ProfilePage';
 import BooksPage from './BooksPage';
 import PracticePage from './PracticePage';
+import SingleBookPage from './SingleBookPage';
 
 /**
  * Display component is the central app component.
@@ -37,6 +38,9 @@ const Display = () => {
                 }
                 {state.currentPage === "practice" &&
                     <PracticePage />
+                }
+                {state.currentPage === "singlebook" &&
+                    <SingleBookPage />
                 }
             </div>
     )

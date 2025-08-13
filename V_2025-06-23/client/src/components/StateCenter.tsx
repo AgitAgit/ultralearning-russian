@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { getUserVocab } from './CommunicationCenter';
 import { addToUserVocab } from '../components/CommunicationCenter';
 
-type AppState = {
+export type AppState = {
   serverAddress: string; // The address of the server
   theme: 'light' | 'dark'; // Theme of the application
   user: {
@@ -13,6 +13,12 @@ type AppState = {
   removeWordFromUserVocab: (word: string, username:string) => Promise<void>; // Function to remove a word from the user's vocabulary
   notifications: string[]; // Array of notifications
   currentPage: string; // Current page in the application (e.g., "login", "home", etc.)
+  currentBook: {
+    title: string;
+    author: string;
+    language: string;
+    wordList: Array<{word: string, count: number}>;
+  } | null; // Current book being viewed
   currentTargetLanguage: "russian" | "english"; // Current target language for the user
   currentSourceLanguage: "english" | "hebrew"; // Current source language for the user
 
@@ -31,6 +37,7 @@ const initialAppState: AppState = {
   removeWordFromUserVocab: async () => {}, // Placeholder function
   notifications: [], // Array of strings
   currentPage: "login",
+  currentBook: null,
   currentTargetLanguage: "russian", // Default target language
   currentSourceLanguage: "english", // Default source language
   // Add more state properties as needed

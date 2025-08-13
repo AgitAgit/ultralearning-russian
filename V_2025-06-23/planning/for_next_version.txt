@@ -1,3 +1,4 @@
+GENERAL
 Data modeling:
 Need to separate words into languages. 
 (
@@ -6,3 +7,6 @@ Need to separate words into languages.
 )
 
 having long arrays in a mongo doc is an anti pattern
+
+CLIENT
+Should use the normal navigation approach with react router
