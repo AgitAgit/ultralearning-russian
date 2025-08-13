@@ -15,8 +15,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI
 
-// Middleware
+// Middleware - ORDER MATTERS!
 app.use(cors());
+
+// Body parsing middleware MUST come before any custom middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -48,7 +50,7 @@ const ensureConnection = async (req, res, next) => {
   }
 };
 
-// Apply connection middleware BEFORE routes
+// Apply connection middleware AFTER body parsing but BEFORE routes
 app.use(ensureConnection);
 
 // routes
