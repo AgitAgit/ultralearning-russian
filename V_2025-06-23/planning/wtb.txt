@@ -95,7 +95,11 @@ DONE(in client)-make sure all words are added/stored in lowercase
 DONE deploy server to aws lambda
 DONE add workflow so pushing to main will deploy server to dev
 DONE deploy client with cloudfront
-add workflow so pushing to main will deploy client
+DONE add workflow so pushing to main will deploy client
+
+DONE add a spinner to indicate unique known words percentage loading
+add some way to view the words in a book by order of frequency
+add a way to add these words to vocab/create a wordpack out of them
 
 change things so the deployed client will aim at the deployed server
 

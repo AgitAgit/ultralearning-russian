@@ -20,6 +20,17 @@ const headerStyles = {
     fontWeight: 'bold',
 };
 
+const spinnerStyle = {
+    display: 'inline-block',
+    width: '16px',
+    height: '16px',
+    border: '2px solid #f3f3f3',
+    borderTop: '2px solid #3498db',
+    borderRadius: '50%',
+    animation: 'spin 1s linear infinite',
+    marginRight: '8px',
+};
+
 // last here 2025/07/09 need to deal with fetching book percentages without creating an infinite loop.
 // maybe separate the percentage array from the books array, then create a third, composite derived state
 // from the both of them and use that for the display
@@ -28,6 +39,7 @@ const BooksPage = () => {
     const [books, setBooks] = useState(null)
     const [uniqueKnownPercent, setUniqueKnownPercent] = useState(null)
     const [booksWithPercentage, setBooksWithPercentage] = useState(null)
+    const [isLoadingPercentages, setIsLoadingPercentages] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,6 +53,7 @@ const BooksPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (books) {
+                setIsLoadingPercentages(true)
                 const newBooksPromiseResults = await Promise.allSettled(books.map(async (book) => {
                     if (state.user && state.user.username) {
                         const data = await getBookPercent(state.serverAddress, state.user.username, book.title, book.author, book.language)
@@ -51,13 +64,36 @@ const BooksPage = () => {
                 const newBooks = newBooksPromiseResults.filter((promise) => promise.status === "fulfilled").map((promise) => {return promise.value})
                 console.log("newBooks",newBooks)
                 setBooksWithPercentage(newBooks)
+                setIsLoadingPercentages(false)
             }
         }
         fetchData();
     }, [books])
 
+    const renderPercentageCell = (book) => {
+        if (isLoadingPercentages) {
+            return (
+                <td style={cellStyles}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <div style={spinnerStyle}></div>
+                        Loading...
+                    </div>
+                </td>
+            );
+        }
+        
+        if (book.uniqueKnownPercent === null || book.uniqueKnownPercent === undefined) {
+            return <td style={cellStyles}>?</td>;
+        }
+        
+        return <td style={cellStyles}>{book.uniqueKnownPercent}</td>;
+    };
+
     return (
         <>
+            <div>
+                <button>refresh</button>
+            </div>
             <table style={tableStyles}>
                 <thead>
                     <tr>
@@ -85,7 +121,7 @@ const BooksPage = () => {
                                     <td style={cellStyles}>{book.title}</td>
                                     <td style={cellStyles}>{book.author}</td>
                                     <td style={cellStyles}>{book.language}</td>
-                                    <td style={cellStyles}>{book.knownPercent || "?"}</td> {/* Placeholder */}
+                                    {renderPercentageCell(book)}
                                     <td style={cellStyles}>{book.wordList.length}</td>
                                 </tr>
                             );
